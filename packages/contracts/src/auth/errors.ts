@@ -1,0 +1,42 @@
+export const ERROR_CODES = {
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  NOT_FOUND: 'NOT_FOUND',
+  UNKNOWN_FIELD: 'UNKNOWN_FIELD',
+  INVALID_OR_EXPIRED_TOKEN: 'INVALID_OR_EXPIRED_TOKEN',
+  PASSWORD_REUSE: 'PASSWORD_REUSE',
+  INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
+  UNAUTHENTICATED: 'UNAUTHENTICATED',
+  SESSION_EXPIRED: 'SESSION_EXPIRED',
+  SESSION_REVOKED: 'SESSION_REVOKED',
+  EMAIL_NOT_VERIFIED: 'EMAIL_NOT_VERIFIED',
+  ACCOUNT_DISABLED: 'ACCOUNT_DISABLED',
+  CSRF_INVALID: 'CSRF_INVALID',
+  ORIGIN_NOT_ALLOWED: 'ORIGIN_NOT_ALLOWED',
+  EMAIL_ALREADY_EXISTS: 'EMAIL_ALREADY_EXISTS',
+  PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
+  UNSUPPORTED_MEDIA_TYPE: 'UNSUPPORTED_MEDIA_TYPE',
+  RATE_LIMITED: 'RATE_LIMITED',
+  ACCOUNT_LOCKED: 'ACCOUNT_LOCKED',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
+} as const;
+
+export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
+
+export interface FieldError {
+  field: string;
+  code: string;
+  message: string;
+}
+
+export interface ProblemDetails {
+  type: string;
+  title: string;
+  status: number;
+  detail: string;
+  instance: string;
+  requestId: string;
+  code: ErrorCode;
+  errors?: FieldError[];
+  retryAfterSeconds?: number;
+}
