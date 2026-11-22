@@ -29,8 +29,5 @@ export function sendProblem(reply: FastifyReply, error: AppError, request: Fasti
   for (const [header, value] of Object.entries(error.headers)) {
     reply.header(header, value);
   }
-  reply
-    .code(error.status)
-    .type('application/problem+json')
-    .send(toProblemDetails(error, request));
+  reply.code(error.status).type('application/problem+json').send(toProblemDetails(error, request));
 }

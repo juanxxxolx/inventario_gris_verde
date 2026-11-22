@@ -1,0 +1,5 @@
+corepack pnpm exec lint-staged --max-arg-length=4000 || exit 1
+corepack pnpm --filter @induinventory/contracts build || exit 1
+corepack pnpm exec tsc -p packages/contracts/tsconfig.json --noEmit || exit 1
+corepack pnpm exec tsc -p apps/api/tsconfig.json --noEmit || exit 1
+corepack pnpm exec tsc -p apps/web/tsconfig.json --noEmit || exit 1

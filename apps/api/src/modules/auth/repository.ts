@@ -35,12 +35,7 @@ export async function findUserByIdForUpdate(
   db: DbExecutor,
   userId: string,
 ): Promise<UserRecord | undefined> {
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, userId))
-    .limit(1)
-    .for('update');
+  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1).for('update');
   return user;
 }
 
@@ -135,10 +130,7 @@ export async function revokeFamily(db: DbExecutor, familyId: string): Promise<vo
     .where(and(eq(refreshTokens.familyId, familyId), isNull(refreshTokens.revokedAt)));
 }
 
-export async function revokeAllUserRefreshTokens(
-  db: DbExecutor,
-  userId: string,
-): Promise<void> {
+export async function revokeAllUserRefreshTokens(db: DbExecutor, userId: string): Promise<void> {
   await db
     .update(refreshTokens)
     .set({ revokedAt: new Date() })
@@ -185,20 +177,14 @@ export async function findVerificationTokenForUpdate(
   return token;
 }
 
-export async function markVerificationTokenUsed(
-  db: DbExecutor,
-  tokenId: string,
-): Promise<void> {
+export async function markVerificationTokenUsed(db: DbExecutor, tokenId: string): Promise<void> {
   await db
     .update(emailVerificationTokens)
     .set({ usedAt: new Date() })
     .where(eq(emailVerificationTokens.id, tokenId));
 }
 
-export async function invalidateActiveResetTokens(
-  db: DbExecutor,
-  userId: string,
-): Promise<void> {
+export async function invalidateActiveResetTokens(db: DbExecutor, userId: string): Promise<void> {
   await db
     .update(passwordResetTokens)
     .set({ invalidatedAt: new Date() })

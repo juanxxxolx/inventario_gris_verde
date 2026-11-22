@@ -23,11 +23,7 @@ async function main(): Promise<void> {
   try {
     await runMigrations(db.runner);
 
-    const [existing] = await db.db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1);
+    const [existing] = await db.db.select().from(users).where(eq(users.email, email)).limit(1);
 
     if (existing) {
       process.stdout.write(`El administrador ${email} ya existe. No se realizaron cambios.\n`);

@@ -41,7 +41,7 @@ import {
   createVerificationToken,
   findFamilyActiveTokens,
   findResetTokenForUpdate,
-  findRefreshTokenForUpdate,
+  findRefreshTokenByHashForUpdate,
   findUserByEmail,
   findUserById,
   findUserByIdForUpdate,
@@ -277,7 +277,10 @@ export class AuthService {
       throw accountDisabled();
     }
 
-    const passwordMatches = await this.deps.hasher.verifyPassword(user.passwordHash, input.password);
+    const passwordMatches = await this.deps.hasher.verifyPassword(
+      user.passwordHash,
+      input.password,
+    );
 
     if (!passwordMatches) {
       await updateUser(this.db, user.id, {
@@ -326,7 +329,7 @@ export class AuthService {
     const now = this.now();
 
     const outcome = await this.db.transaction(async (tx) => {
-      const record = await findRefreshTokenForUpdate(tx, tokenHash);
+      const record = await findRefreshTokenByHashForUpdate(tx, tokenHash);
 
       if (!record) {
         return { type: 'unknown' } as const;

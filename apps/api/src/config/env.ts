@@ -5,9 +5,7 @@ import { z } from 'zod';
 
 dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
 
-const booleanString = z
-  .enum(['true', 'false'])
-  .transform((value) => value === 'true');
+const booleanString = z.enum(['true', 'false']).transform((value) => value === 'true');
 
 const optionalString = z.preprocess(
   (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
@@ -141,6 +139,17 @@ export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
   return cached;
 }
 
+function stringifyBooleanValues(
+  values: Partial<Record<keyof Env, unknown>>,
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]) => [
+      key,
+      typeof value === 'boolean' ? String(value) : value,
+    ]),
+  );
+}
+
 export function createTestEnv(overrides: Partial<Record<keyof Env, unknown>> = {}): Env {
   const base = {
     NODE_ENV: 'test',
@@ -176,5 +185,5 @@ export function createTestEnv(overrides: Partial<Record<keyof Env, unknown>> = {
     ...overrides,
   };
 
-  return envSchema.parse(base);
+  return envSchema.parse(stringifyBooleanValues(base));
 }

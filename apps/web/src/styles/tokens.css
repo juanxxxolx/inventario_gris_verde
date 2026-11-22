@@ -1,0 +1,184 @@
+@import '@fontsource-variable/inter/index.css';
+
+/*
+ * InduInventory · sistema de diseño GRIS VERDE
+ * Todos los valores de color viven aquí. Los componentes solo consumen tokens.
+ * Los nombres de la paleta anterior se conservan como aliases para no romper
+ * estilos existentes; sus valores apuntan ahora a la identidad GRIS VERDE.
+ */
+:root {
+  color-scheme: light;
+
+  /* --- Tipografía --------------------------------------------------------- */
+  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-md: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 26px;
+  --font-size-3xl: 32px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --letter-spacing-label: 0.08em;
+
+  /* --- Paleta corporativa GRIS VERDE ------------------------------------- */
+  --color-verde-bosque: #254d3b;
+  --color-verde-principal: #356b50;
+  --color-verde-secundario: #648b70;
+  --color-verde-suave: #dce8de;
+  --color-gris-grafito: #303633;
+  --color-gris-oscuro: #454d49;
+  --color-gris-medio: #858e88;
+  --color-gris-claro: #e5e9e5;
+  --color-fondo: #f5f7f4;
+  --color-blanco: #ffffff;
+  --color-superficie-alternativa: #fafbfa;
+
+  /* --- Aliases de la paleta anterior (compatibilidad) -------------------- */
+  --color-brand-deep: var(--color-verde-bosque);
+  --color-primary: var(--color-verde-principal);
+  --color-primary-soft: var(--color-verde-suave);
+  --color-background: var(--color-fondo);
+  --color-sidebar: var(--color-verde-bosque);
+  --color-surface: var(--color-blanco);
+  --color-border: var(--color-gris-claro);
+  /* GRIS MEDIO se reserva para metadatos no críticos: 3.4:1 sobre blanco no
+     alcanza AA en texto pequeño. El texto secundario usa GRIS OSCURO (7.9:1). */
+  --color-text: var(--color-gris-grafito);
+  --color-text-muted: var(--color-gris-oscuro);
+  --color-text-subtle: var(--color-gris-medio);
+
+  /* --- Colores semánticos ------------------------------------------------- */
+  --color-success-fg: #236b46;
+  --color-success-bg: #e7f3eb;
+  --color-success-border: #b9d9c5;
+
+  --color-warning-fg: #8a5a00;
+  --color-warning-bg: #fff5e2;
+  --color-warning-border: #f0d9a8;
+
+  --color-error-fg: #a3281c;
+  --color-error-bg: #fdecea;
+  --color-error-border: #f3c5bf;
+
+  --color-info-fg: #1f5b96;
+  --color-info-bg: #eaf2fa;
+  --color-info-border: #c5d9ec;
+
+  --color-pending-fg: #5f6b64;
+  --color-pending-bg: #f0f2f0;
+  --color-pending-border: #dce1dd;
+
+  --color-neutral-fg: var(--color-gris-oscuro);
+  --color-neutral-bg: var(--color-superficie-alternativa);
+  --color-neutral-border: var(--color-gris-claro);
+
+  --color-stock-low-fg: var(--color-warning-fg);
+  --color-stock-low-bg: var(--color-warning-bg);
+  --color-stock-out-fg: var(--color-error-fg);
+  --color-stock-out-bg: var(--color-error-bg);
+
+  /* --- Superficies de la aplicación -------------------------------------- */
+  --surface-page: var(--color-fondo);
+  --surface-card: var(--color-blanco);
+  --surface-sidebar: var(--color-verde-bosque);
+  --surface-topbar: var(--color-blanco);
+  --surface-subtle: var(--color-superficie-alternativa);
+  --surface-sidebar-hover: #2f6049;
+  --surface-sidebar-active: var(--color-verde-principal);
+
+  /* --- Radios, sombras, espaciado y movimiento --------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-card: 8px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(48, 54, 51, 0.06);
+  --shadow-md: 0 6px 18px rgba(48, 54, 51, 0.1);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --focus-ring: 0 0 0 2px var(--color-blanco), 0 0 0 4px var(--color-verde-principal);
+  --focus-ring-on-dark: 0 0 0 2px var(--color-verde-bosque), 0 0 0 4px #ffffff;
+  --transition-fast: 120ms ease;
+
+  --sidebar-width: 248px;
+  --topbar-height: 64px;
+}
+
+/* --- Reset y base -------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+::selection {
+  background: var(--color-verde-suave);
+  color: var(--color-gris-grafito);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -8,7 +8,10 @@ async function main(): Promise<void> {
   const db = await createDatabase(env);
 
   try {
-    const applied = await runMigrations(db.runner, path.resolve(process.cwd(), 'drizzle/migrations'));
+    const applied = await runMigrations(
+      db.runner,
+      path.resolve(process.cwd(), 'drizzle/migrations'),
+    );
     if (applied.length === 0) {
       process.stdout.write('No hay migraciones pendientes.\n');
     } else {

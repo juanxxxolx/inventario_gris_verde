@@ -12,8 +12,14 @@ export const fullNameSchema = z
   .pipe(
     z
       .string()
-      .min(FULL_NAME_MIN_LENGTH, `El nombre debe tener al menos ${FULL_NAME_MIN_LENGTH} caracteres.`)
-      .max(FULL_NAME_MAX_LENGTH, `El nombre no puede superar los ${FULL_NAME_MAX_LENGTH} caracteres.`)
+      .min(
+        FULL_NAME_MIN_LENGTH,
+        `El nombre debe tener al menos ${FULL_NAME_MIN_LENGTH} caracteres.`,
+      )
+      .max(
+        FULL_NAME_MAX_LENGTH,
+        `El nombre no puede superar los ${FULL_NAME_MAX_LENGTH} caracteres.`,
+      )
       .regex(
         FULL_NAME_PATTERN,
         'El nombre solo puede contener letras, espacios, apóstrofes y guiones.',

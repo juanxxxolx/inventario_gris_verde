@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsup src/server.ts --format esm --packages external --sourcemap --clean",
+    "build": "tsup src/server.ts --format esm --sourcemap --clean",
     "start": "node dist/server.js",
     "lint": "eslint src tests",
     "typecheck": "tsc --noEmit",

@@ -1,9 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import Fastify, {
-  type FastifyBaseLogger,
-  type FastifyError,
-  type FastifyInstance,
-} from 'fastify';
+import Fastify, { type FastifyBaseLogger, type FastifyError, type FastifyInstance } from 'fastify';
 import cookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import type { Logger } from 'pino';
@@ -43,6 +39,15 @@ export interface BuildAppOptions {
 
 const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
+const JSON_BODY_ROUTES = new Set([
+  '/api/auth/register',
+  '/api/auth/verify-email',
+  '/api/auth/resend-verification',
+  '/api/auth/login',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
+]);
+
 export async function buildApp(options: BuildAppOptions): Promise<FastifyInstance> {
   const { env, deps } = options;
   const logger = options.logger ?? createLogger(env);
@@ -52,7 +57,6 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     trustProxy: env.TRUST_PROXY,
     bodyLimit: 64 * 1024,
     genReqId: () => randomUUID(),
-    disableRequestLogging: env.NODE_ENV === 'test',
     ajv: { customOptions: { removeAdditional: false } },
   });
 
@@ -76,11 +80,7 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
     }
 
     const origin = request.headers.origin;
-    if (
-      typeof origin === 'string' &&
-      origin !== env.APP_ORIGIN &&
-      origin !== env.APP_PUBLIC_URL
-    ) {
+    if (typeof origin === 'string' && origin !== env.APP_ORIGIN && origin !== env.APP_PUBLIC_URL) {
       throw new AppError({
         code: 'ORIGIN_NOT_ALLOWED',
         status: 403,
@@ -89,23 +89,22 @@ export async function buildApp(options: BuildAppOptions): Promise<FastifyInstanc
       });
     }
 
-    if (!request.url.startsWith('/api/auth/')) {
+    const pathname = request.url.split('?')[0] ?? request.url;
+    if (!pathname.startsWith('/api/auth/')) {
       return;
     }
 
-    const mediaType = request.headers['content-type']?.split(';')[0]?.trim().toLowerCase();
-    if (mediaType !== 'application/json') {
-      throw unsupportedMediaType();
+    if (JSON_BODY_ROUTES.has(pathname)) {
+      const mediaType = request.headers['content-type']?.split(';')[0]?.trim().toLowerCase();
+      if (mediaType !== 'application/json') {
+        throw unsupportedMediaType();
+      }
     }
 
     const cookieToken = readCsrfCookie(request, env);
     const headerToken = request.headers['x-csrf-token'];
 
-    if (
-      !cookieToken ||
-      typeof headerToken !== 'string' ||
-      !safeEqual(cookieToken, headerToken)
-    ) {
+    if (!cookieToken || typeof headerToken !== 'string' || !safeEqual(cookieToken, headerToken)) {
       throw new AppError({
         code: 'CSRF_INVALID',
         status: 403,

@@ -1,3 +1,5 @@
+import { mkdirSync } from 'node:fs';
+import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { drizzle as drizzlePglite } from 'drizzle-orm/pglite';
 import { drizzle as drizzlePostgres } from 'drizzle-orm/postgres-js';
@@ -7,10 +9,7 @@ import type { Env } from '../../config/env';
 import { schema } from './schema';
 
 export type AppDatabase = PgDatabase<PgQueryResultHKT, typeof schema>;
-export type DbExecutor = Pick<
-  AppDatabase,
-  'select' | 'insert' | 'update' | 'delete' | 'execute'
->;
+export type DbExecutor = Pick<AppDatabase, 'select' | 'insert' | 'update' | 'delete' | 'execute'>;
 
 export interface SqlRunner {
   exec(sqlText: string): Promise<void>;
@@ -51,6 +50,7 @@ export async function createDatabase(env: Env): Promise<DatabaseHandle> {
     };
   }
 
+  mkdirSync(path.dirname(env.PGLITE_DATA_DIR), { recursive: true });
   const client = new PGlite(env.PGLITE_DATA_DIR);
   await client.waitReady;
   const db = drizzlePglite(client, { schema }) as unknown as AppDatabase;
